@@ -27,6 +27,10 @@ export async function POST(req: NextRequest) {
       archive.append(iconContent, { name: `icons/${iconName}` });
     }
 
+    // フォームデータをJSONファイルとして追加
+    const formDataJson = JSON.stringify(validatedData, null, 2);
+    archive.append(formDataJson, { name: "form-data.json" });
+
     const chunks: Uint8Array[] = [];
     archive.on("data", (chunk) => chunks.push(chunk));
 

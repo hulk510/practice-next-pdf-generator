@@ -100,8 +100,18 @@ const PDFDocument = ({ formData }: { formData: FormData }) => (
         {renderImage(formData.usageLevel4) && (
           <Image style={styles.image} src={renderImage(formData.usageLevel4)} />
         )}
-        <Text style={styles.text}>自由記述: {formData.freeDescription}</Text>
-        <Text style={styles.text}>連絡先: {formData.contactInfo}</Text>
+        <Text style={styles.text}>自由記述:</Text>
+        {formData.freeDescriptions.map((desc, index) => (
+          <Text key={index} style={styles.text}>
+            {index + 1}. {desc.content}
+          </Text>
+        ))}
+        <Text style={styles.text}>連絡先:</Text>
+        {formData.contactInfos.map((contact, index) => (
+          <Text key={index} style={styles.text}>
+            {index + 1}. {contact.info}
+          </Text>
+        ))}
       </View>
     </PDFPage>
   </Document>
