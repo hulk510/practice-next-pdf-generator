@@ -1,3 +1,4 @@
+import { FormData } from "@/types/formData";
 import {
   Document,
   Font,
@@ -7,15 +8,17 @@ import {
   Text,
   View,
 } from "@react-pdf/renderer";
+import path from "path";
 
+// Register fonts
 Font.register({
   family: "NotoSansJP",
   fonts: [
     {
-      src: "/fonts/NotoSansJP-Regular.ttf",
+      src: path.resolve("./public/fonts/NotoSansJP-Regular.ttf"),
     },
     {
-      src: "/fonts/NotoSansJP-Bold.ttf",
+      src: path.resolve("./public/fonts/NotoSansJP-Bold.ttf"),
       fontWeight: "bold",
     },
   ],
@@ -53,19 +56,19 @@ const styles = StyleSheet.create({
 const renderImage = (level: number) => {
   switch (level) {
     case 1:
-      return "/icons/1.png";
+      return path.resolve("./public/icons/1.png");
     case 2:
-      return "/icons/2.png";
+      return path.resolve("./public/icons/2.png");
     case 3:
-      return "/icons/3.png";
+      return path.resolve("./public/icons/3.png");
     case 4:
-      return "/icons/4.png";
+      return path.resolve("./public/icons/4.png");
     default:
       return "";
   }
 };
 
-const PDFDocument = ({ formData }: { formData: any }) => (
+const PDFDocument = ({ formData }: { formData: FormData }) => (
   <Document>
     <PDFPage size='A4' style={styles.page}>
       <View style={styles.section}>
