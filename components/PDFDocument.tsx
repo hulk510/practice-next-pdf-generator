@@ -1,4 +1,5 @@
-import { FormData } from "@/types/formData";
+import path from 'node:path'
+import type { FormData } from '@/types/formData'
 import {
   Document,
   Font,
@@ -7,30 +8,29 @@ import {
   StyleSheet,
   Text,
   View,
-} from "@react-pdf/renderer";
-import path from "path";
+} from '@react-pdf/renderer'
 
 // Register fonts
 Font.register({
-  family: "NotoSansJP",
+  family: 'NotoSansJP',
   fonts: [
     {
-      src: path.resolve("./public/fonts/NotoSansJP-Regular.ttf"),
+      src: path.resolve('./public/fonts/NotoSansJP-Regular.ttf'),
     },
     {
-      src: path.resolve("./public/fonts/NotoSansJP-Bold.ttf"),
-      fontWeight: "bold",
+      src: path.resolve('./public/fonts/NotoSansJP-Bold.ttf'),
+      fontWeight: 'bold',
     },
   ],
-});
+})
 
 // Create styles for PDF
 const styles = StyleSheet.create({
   page: {
-    flexDirection: "column",
-    backgroundColor: "#ffffff",
+    flexDirection: 'column',
+    backgroundColor: '#ffffff',
     padding: 30,
-    fontFamily: "NotoSansJP",
+    fontFamily: 'NotoSansJP',
   },
   section: {
     margin: 10,
@@ -49,24 +49,24 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     width: 100,
     height: 100,
-    objectFit: "contain",
+    objectFit: 'contain',
   },
-});
+})
 
 const renderImage = (level: number) => {
   switch (level) {
     case 1:
-      return path.resolve("./public/icons/1.png");
+      return path.resolve('./public/icons/1.png')
     case 2:
-      return path.resolve("./public/icons/2.png");
+      return path.resolve('./public/icons/2.png')
     case 3:
-      return path.resolve("./public/icons/3.png");
+      return path.resolve('./public/icons/3.png')
     case 4:
-      return path.resolve("./public/icons/4.png");
+      return path.resolve('./public/icons/4.png')
     default:
-      return "";
+      return ''
   }
-};
+}
 
 const PDFDocument = ({ formData }: { formData: FormData }) => (
   <Document>
@@ -74,7 +74,7 @@ const PDFDocument = ({ formData }: { formData: FormData }) => (
       <View style={styles.section}>
         <Text style={styles.title}>利用ガイドライン</Text>
         <Text style={styles.text}>
-          権利継承: {formData.inheritanceRights ? "あり" : "なし"}
+          権利継承: {formData.inheritanceRights ? 'あり' : 'なし'}
         </Text>
         <Text style={styles.text}>
           使用レベル1: レベル {formData.usageLevel1}
@@ -101,20 +101,20 @@ const PDFDocument = ({ formData }: { formData: FormData }) => (
           <Image style={styles.image} src={renderImage(formData.usageLevel4)} />
         )}
         <Text style={styles.text}>自由記述:</Text>
-        {formData.freeDescriptions.map((desc, index) => (
-          <Text key={index} style={styles.text}>
-            {index + 1}. {desc.content}
+        {formData.freeDescriptions.map((desc) => (
+          <Text key={desc.id} style={styles.text}>
+            {desc.id}. {desc.content}
           </Text>
         ))}
         <Text style={styles.text}>連絡先:</Text>
-        {formData.contactInfos.map((contact, index) => (
-          <Text key={index} style={styles.text}>
-            {index + 1}. {contact.info}
+        {formData.contactInfos.map((contact) => (
+          <Text key={contact.id} style={styles.text}>
+            {contact.id}. {contact.info}
           </Text>
         ))}
       </View>
     </PDFPage>
   </Document>
-);
+)
 
-export default PDFDocument;
+export default PDFDocument
