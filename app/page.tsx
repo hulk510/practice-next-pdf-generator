@@ -1,37 +1,41 @@
-"use client";
+'use client'
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Slider } from "@/components/ui/slider";
-import { Switch } from "@/components/ui/switch";
-import { downloadZip } from "@/services/downloadService";
-import { FormData, formDataSchema } from "@/types/formData";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { PlusCircle, Trash2 } from "lucide-react";
-import { useState } from "react";
-import { Controller, useFieldArray, useForm } from "react-hook-form";
-import { DragDropImport } from "../components/DragDropImport";
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Slider } from '@/components/ui/slider'
+import { Switch } from '@/components/ui/switch'
+import { downloadZip } from '@/services/downloadService'
+import { type FormData, formDataSchema } from '@/types/formData'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { PlusCircle, Trash2 } from 'lucide-react'
+import { useState } from 'react'
+import { Controller, useFieldArray, useForm } from 'react-hook-form'
+import { DragDropImport } from '../components/DragDropImport'
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "../components/ui/accordion";
+} from '../components/ui/accordion'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../components/ui/card";
-import { Textarea } from "../components/ui/textarea";
-import { toast } from "../hooks/use-toast";
-import { FormDataService } from "../services/formDataService";
+} from '../components/ui/card'
+import { Textarea } from '../components/ui/textarea'
+import { toast } from '../hooks/use-toast'
+import {
+  createDownloadLink,
+  exportJSON,
+  importJSON,
+} from '../services/formDataService'
 
 export default function DynamicPDFGenerator() {
-  const [isLoading, setIsLoading] = useState(false);
-  const { control, handleSubmit, reset } = useForm<FormData>({
+  const [isLoading, setIsLoading] = useState(false)
+  const { register, control, handleSubmit, reset } = useForm<FormData>({
     resolver: zodResolver(formDataSchema),
     defaultValues: {
       inheritanceRights: false,
@@ -39,10 +43,10 @@ export default function DynamicPDFGenerator() {
       usageLevel2: 1,
       usageLevel3: 1,
       usageLevel4: 1,
-      freeDescriptions: [{ content: "" }],
-      contactInfos: [{ info: "" }],
+      freeDescriptions: [{ content: '' }],
+      contactInfos: [{ info: '' }],
     },
-  });
+  })
 
   const {
     fields: freeDescriptionFields,
@@ -50,8 +54,8 @@ export default function DynamicPDFGenerator() {
     remove: removeFreeDescription,
   } = useFieldArray({
     control,
-    name: "freeDescriptions",
-  });
+    name: 'freeDescriptions',
+  })
 
   const {
     fields: contactInfoFields,
@@ -59,72 +63,72 @@ export default function DynamicPDFGenerator() {
     remove: removeContactInfo,
   } = useFieldArray({
     control,
-    name: "contactInfos",
-  });
+    name: 'contactInfos',
+  })
 
   const onSubmit = async (data: FormData) => {
-    setIsLoading(true);
+    setIsLoading(true)
     try {
-      await downloadZip(data);
+      await downloadZip(data)
       toast({
-        title: "成功",
-        description: "ZIPファイルが生成され、ダウンロードされました。",
-        className: "bg-green-500 text-white",
-      });
+        title: '成功',
+        description: 'ZIPファイルが生成され、ダウンロードされました。',
+        className: 'bg-green-500 text-white',
+      })
     } catch (error) {
-      console.error("Error downloading ZIP:", error);
+      console.error('Error downloading ZIP:', error)
       toast({
-        title: "エラー",
+        title: 'エラー',
         description:
-          "ZIPファイルの生成に失敗しました。もう一度お試しください。",
-        variant: "destructive",
-      });
+          'ZIPファイルの生成に失敗しました。もう一度お試しください。',
+        variant: 'destructive',
+      })
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
-  const exportJSON = (data: FormData) => {
+  const exportFormData = (data: FormData) => {
     try {
-      const jsonString = FormDataService.exportJSON(data);
-      FormDataService.createDownloadLink(jsonString, "form-data.json");
+      const jsonString = exportJSON(data)
+      createDownloadLink(jsonString, 'form-data.json')
       toast({
-        title: "成功",
-        description: "フォームデータが正常にエクスポートされました。",
-        className: "bg-green-500 text-white",
-      });
+        title: '成功',
+        description: 'フォームデータが正常にエクスポートされました。',
+        className: 'bg-green-500 text-white',
+      })
     } catch (error) {
-      console.error("Error exporting JSON:", error);
+      console.error('Error exporting JSON:', error)
       toast({
-        title: "エラー",
+        title: 'エラー',
         description:
-          "フォームデータのエクスポートに失敗しました。もう一度お試しください。",
-        variant: "destructive",
-      });
+          'フォームデータのエクスポートに失敗しました。もう一度お試しください。',
+        variant: 'destructive',
+      })
     }
-  };
+  }
 
-  const importJSON = (jsonString: string) => {
+  const importFormData = (jsonString: string) => {
     try {
-      const importedData = FormDataService.importJSON(jsonString);
-      reset(importedData);
+      const importedData = importJSON(jsonString)
+      reset(importedData)
       toast({
-        title: "成功",
-        description: "フォームデータが正常にインポートされました。",
-        className: "bg-green-500 text-white",
-      });
+        title: '成功',
+        description: 'フォームデータが正常にインポートされました。',
+        className: 'bg-green-500 text-white',
+      })
     } catch (error) {
-      console.error("Error importing JSON:", error);
+      console.error('Error importing JSON:', error)
       toast({
-        title: "エラー",
+        title: 'エラー',
         description:
           error instanceof Error
             ? error.message
-            : "フォームデータのインポートに失敗しました。ファイルを確認してください。",
-        variant: "destructive",
-      });
+            : 'フォームデータのインポートに失敗しました。ファイルを確認してください。',
+        variant: 'destructive',
+      })
     }
-  };
+  }
 
   return (
     <div className='container mx-auto py-8 max-w-3xl'>
@@ -149,7 +153,7 @@ export default function DynamicPDFGenerator() {
                 <CardContent>
                   <Button
                     type='button'
-                    onClick={handleSubmit(exportJSON)}
+                    onClick={handleSubmit(exportFormData)}
                     className='w-full'
                   >
                     JSONエクスポート
@@ -167,7 +171,7 @@ export default function DynamicPDFGenerator() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <DragDropImport onImport={importJSON} />
+                  <DragDropImport onImport={importFormData} />
                 </CardContent>
               </Card>
             </div>
@@ -208,7 +212,7 @@ export default function DynamicPDFGenerator() {
           </CardContent>
         </Card>
 
-        {["usageLevel1", "usageLevel2", "usageLevel3", "usageLevel4"].map(
+        {['usageLevel1', 'usageLevel2', 'usageLevel3', 'usageLevel4'].map(
           (use, index) => (
             <Card key={use}>
               <CardHeader>
@@ -244,7 +248,7 @@ export default function DynamicPDFGenerator() {
                       control={control}
                       render={({ field }) => (
                         <div className='w-12 text-center font-bold'>
-                          {typeof field.value === "number" ? field.value : ""}
+                          {typeof field.value === 'number' ? field.value : ''}
                         </div>
                       )}
                     />
@@ -280,6 +284,11 @@ export default function DynamicPDFGenerator() {
                   key={field.id}
                   className='flex items-center space-x-2 mt-2'
                 >
+                  <input
+                    type='hidden'
+                    {...register(`freeDescriptions.${index}.id` as const)}
+                    value={field.id}
+                  />
                   <Controller
                     name={`freeDescriptions.${index}.content`}
                     control={control}
@@ -307,7 +316,7 @@ export default function DynamicPDFGenerator() {
                 variant='outline'
                 size='sm'
                 className='mt-2'
-                onClick={() => appendFreeDescription({ content: "" })}
+                onClick={() => appendFreeDescription({ id: '', content: '' })}
               >
                 <PlusCircle className='h-4 w-4 mr-2' />
                 追加
@@ -320,6 +329,11 @@ export default function DynamicPDFGenerator() {
                   key={field.id}
                   className='flex items-center space-x-2 mt-2'
                 >
+                  <input
+                    type='hidden'
+                    {...register(`contactInfos.${index}.id` as const)}
+                    value={field.id}
+                  />
                   <Controller
                     name={`contactInfos.${index}.info`}
                     control={control}
@@ -347,7 +361,7 @@ export default function DynamicPDFGenerator() {
                 variant='outline'
                 size='sm'
                 className='mt-2'
-                onClick={() => appendContactInfo({ info: "" })}
+                onClick={() => appendContactInfo({ id: '', info: '' })}
               >
                 <PlusCircle className='h-4 w-4 mr-2' />
                 追加
@@ -362,10 +376,10 @@ export default function DynamicPDFGenerator() {
             disabled={isLoading}
             className='w-full max-w-md'
           >
-            {isLoading ? "生成中..." : "利用ガイドラインをダウンロード"}
+            {isLoading ? '生成中...' : '利用ガイドラインをダウンロード'}
           </Button>
         </div>
       </form>
     </div>
-  );
+  )
 }

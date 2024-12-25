@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod'
 
 export const formDataSchema = z.object({
   inheritanceRights: z.boolean(),
@@ -6,8 +6,8 @@ export const formDataSchema = z.object({
   usageLevel2: z.number().min(1).max(4),
   usageLevel3: z.number().min(1).max(4),
   usageLevel4: z.number().min(1).max(4),
-  freeDescriptions: z.array(z.object({ content: z.string() })),
-  contactInfos: z.array(z.object({ info: z.string() })),
-});
+  freeDescriptions: z.array(z.object({ id: z.string(), content: z.string() })),
+  contactInfos: z.array(z.object({ id: z.string(), info: z.string() })),
+})
 
-export type FormData = z.infer<typeof formDataSchema>;
+export type FormData = z.infer<typeof formDataSchema>
