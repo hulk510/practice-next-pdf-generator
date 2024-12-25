@@ -1,0 +1,21 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:best-practices",
+    "config:js-app",
+    ":automergeStableNonMajor",
+    ":automergePr",
+    ":disablePrControls",
+    ":label(renovate)",
+    ":maintainLockFilesWeekly",
+    ":rebaseStalePrs",
+    ":semanticCommits",
+    "npm:unpublishSafe",
+    "schedule:weekends",
+    ":prConcurrentLimit10",
+    "customManagers:biomeVersions"
+  ],
+  "automergeStrategy": "squash",
+  "assigneesFromCodeOwners": true,
+  "dependencyDashboardAutoclose": true
+}
