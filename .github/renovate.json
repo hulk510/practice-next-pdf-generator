@@ -10,7 +10,7 @@
     ":maintainLockFilesWeekly",
     ":rebaseStalePrs",
     ":semanticCommits",
-    "npm:unpublishSafe",
+    "security:minimumReleaseAgeNpm",
     "schedule:weekends",
     ":prConcurrentLimit10",
     "customManagers:biomeVersions"
