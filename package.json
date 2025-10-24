@@ -43,7 +43,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "@types/node": "20.17.10",
+    "@types/node": "22.18.12",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "postcss": "8.4.49",
